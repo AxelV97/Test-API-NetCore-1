@@ -37,7 +37,7 @@ namespace TestingCore.Controllers
         [Route("{Id}")]
         public IActionResult GetMovie(int Id)
         {
-            var movieInDb = _context.Movies.SingleOrDefault(m => m.Id == Id);
+            var movieInDb = _context.Movies.Include(m => m.Genre).SingleOrDefault(m => m.Id == Id);
 
             if (movieInDb == null)
             {

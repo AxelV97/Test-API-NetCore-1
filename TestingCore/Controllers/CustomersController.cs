@@ -8,6 +8,7 @@ using TestingCore.Data;
 using TestingCore.Models;
 using TestingCore.DTO;
 using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.EntityFrameworkCore;
 
 namespace TestingCore.Controllers
 {
@@ -27,14 +28,17 @@ namespace TestingCore.Controllers
         [HttpGet]
         public IEnumerable<CustomerDTO> GetCustomers()
         {
-            return _context.Customers.ToList().Select(_mapper.Map<Customer, CustomerDTO>);
+            return _context.Customers
+                .Include(c => c.MembershipType)
+                .ToList()
+                .Select(_mapper.Map<Customer, CustomerDTO>);
         }
 
         [HttpGet]
         [Route("{Id}")]
         public IActionResult GetCustomer(int Id)
         {
-            var customerInDb = _context.Customers.SingleOrDefault(c => c.Id == Id);
+            var customerInDb = _context.Customers.Include(c => c.MembershipType).SingleOrDefault(c => c.Id == Id);
 
             if (customerInDb == null)
             {
@@ -58,7 +62,6 @@ namespace TestingCore.Controllers
             _context.SaveChanges();
 
             customerDTO.Id = customer.Id;
-
 
             return CreatedAtAction(nameof(GetCustomer), new { Id = customer.Id }, customerDTO);
 

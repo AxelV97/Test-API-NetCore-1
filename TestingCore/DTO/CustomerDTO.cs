@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using TestingCore.Models;
 
 namespace TestingCore.DTO
 {
@@ -16,7 +15,7 @@ namespace TestingCore.DTO
         public string Name { get; set; }
         public DateTime? BirthDate { get; set; }
         public bool IsSuscribedInNewsletter { get; set; }
-
-        public int MembershipTypeId { get; set; }
+        public byte MembershipTypeId { get; set; }
+        public MembershipTypeDTO MembershipType { get; set; }
     }
 }
